@@ -1,11 +1,10 @@
-html { font: 18px "Times New Roman", Times, serif }
-
 html, body { height: 100% }
 
-body, header, .drop-thead { background: white }
+body, header { background: white }
 
 body {
 	margin: 0 0 24px;
+	font: 18px "Times New Roman", Times, serif;
 }
 
 /* Change selection color */
@@ -14,11 +13,11 @@ body {
 
 
 /* table-like layout */
-.col  { display: table-cell }
-.full   { width: 100%    }
+.col { display: table-cell }
+.full { width: 100% }
 
 
-.event-toggle {
+#event-toggle {
 	display: inline-block;
 	margin-right: 17px;
 	border: 1px solid #ccc;
@@ -28,7 +27,7 @@ body {
 }
 
 
-header, .scroller {
+header, #scroller {
     position: fixed;
     width: 100%;
 	min-width: 620px;
@@ -46,7 +45,7 @@ header {
     box-shadow: 0 2px 4px rgba(0,0,0,.15);
 }
 
-.scroller {
+#scroller {
     overflow-y: scroll;
     top: 75px;
     bottom: 0;

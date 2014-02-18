@@ -1,26 +1,17 @@
-// Array-like object to Array:
-function toArray(obj) {
-	for (var a=[], l=obj.length; l--;) a[l]=obj[l];
-	return a;
-}
-
-// Get elements by CSS selector
-function $$(s, el) {
-	return toArray( (el || document).querySelectorAll(s) );
-}
-function $(s, el) {
-	return (el || document).querySelector(s);
+// Helper functions:
+function $id(id) {
+	return document.getElementById(id);
 }
 
 function el(name) {
 	return document.createElement(name);
 }
 
-function pad(n, width, z) {
-	z = z || '0';
-	n = n + '';
-	return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
+function padLeft(str, width) {
+	return str.length >= width ? str : new Array(width - str.length + 1).join('0') + str;
 }
+
+
 
 function cellClickHandler() {
 	var range = document.createRange();
@@ -40,13 +31,13 @@ function createRow(id, char) {
 	var code5 = el("code");
 
 	tr.id = "k_" + i;
-	
+
 	td1.textContent = char;
 	td2.textContent = id;
 	code3.textContent = '&#' + id + ';';
 	var hex = id.toString(16);
 	code4.textContent = '\\' + hex;
-	code5.textContent = '\\u' + pad(hex, 4);
+	code5.textContent = '\\u' + padLeft(hex, 4);
 
 
 	// select text in cells when clicked:
@@ -68,7 +59,7 @@ function createRow(id, char) {
 }
 
 
-var trParent = $('#data');
+var trParent = $id('data');
 
 var numInsertions = 0;
 var i = 0;
@@ -90,10 +81,10 @@ insert1000Rows();
 
 
 // Character search:
-var searchField = $('#search');
+var searchField = $id('search');
 
 function keyHandler(event) {
-    location.hash = "#k_" + event.which || window.event.keyCode;
+    location.hash = "#k_" + (event.which || window.event.keyCode);
 	searchField.focus();
 }
 
@@ -102,7 +93,7 @@ searchField.addEventListener(eventType, keyHandler);
 
 
 // Event type toggleing
-$('.event-toggle').onchange = function() {
+$id('event-toggle').onchange = function() {
 	searchField.removeEventListener(eventType, keyHandler);
 	searchField.addEventListener(this.value, keyHandler);
 	eventType = this.value;
