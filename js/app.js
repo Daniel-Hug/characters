@@ -1,127 +1,80 @@
-// Helper functions:
-function $id(id) {
-	return document.getElementById(id);
+// Get element by CSS selector:
+function qs(selector, scope) {
+	return (scope || document).querySelector(selector);
 }
 
-function on(target, type, callback) {
-	target.addEventListener(type, callback, false);
+// Add and remove event listeners:
+function on(target, type, callback, useCapture) {
+	target.addEventListener(type, callback, !!useCapture);
+}
+function off(target, type, callback, useCapture) {
+	target.removeEventListener(type, callback, !!useCapture);
 }
 
-function off(target, type, callback) {
-	target.removeEventListener(type, callback, false);
-}
-
-function el(name) {
-	return document.createElement(name);
-}
-
+// Pad string with leading zeros:
 function padLeft(str, width) {
 	return str.length >= width ? str : new Array(width - str.length + 1).join('0') + str;
 }
 
 
 
-// Listen for load events:
-console.time('window.onload fired');
-console.time('DOMContentLoaded fired');
-
-on(window, 'load', function() {
-	console.timeEnd('window.onload fired');
-});
-on(document, 'DOMContentLoaded', function() {
-	console.timeEnd('DOMContentLoaded fired');
-});
-
-
-
 // Character search:
-var searchField = $id('search');
+(function() {
+	var eventSelect = qs('#event-toggle');
+	var searchField = qs('#search');
+	var eventType = eventSelect.value;
 
-function keyHandler(event) {
-	var decimal = event.which == null ? event.keyCode : event.which;
-    location.hash = "#k_" + decimal;
-	searchField.focus();
-}
+	// Search:
+	function keyHandler(event) {
+		var decimal = event.which == null ? event.keyCode : event.which;
+		location.hash = "#k_" + decimal;
+		searchField.focus();
+	}
+	on(searchField, eventType, keyHandler);
 
-var eventType = 'keypress';
-on(searchField, eventType, keyHandler);
-
-// Event type toggleing
-on($id('event-toggle'), function() {
-	off(searchField, eventType, keyHandler);
-	on(searchField, this.value, keyHandler);
-	eventType = this.value;
-});
-
+	// Event type toggle:
+	on(eventSelect, function toggleEvent() {
+		off(searchField, eventType, keyHandler);
+		on(searchField, (eventType = eventSelect.value), keyHandler);
+	});
+})();
 
 
-// Row creation:
-function cellClickHandler() {
-	var range = document.createRange();
-	range.selectNode(this.firstChild);
-	window.getSelection().addRange(range);
-}
 
-function createRow(id) {
-	var char = String.fromCharCode(id);
-	var hex = id.toString(16);
+function init() {
+	var src = '',
+	trParent = qs('#data'),
+	entityMap = {
+		'&': '&amp;',
+		'<': '&lt;',
+		'>': '&gt;'
+	},
+	hex, char;
 
-	var tr   = el("tr");
-	var td1  = el("td");
-	var td2  = el("td");
-	var td3  = el("td");
-	var td4  = el("td");
-	var td5  = el("td");
-	var code3 = el("code");
-	var code4 = el("code");
-	var code5 = el("code");
-
-	tr.id = "k_" + i;
-
-	td1.textContent = char;
-	td2.textContent = id;
-	code3.textContent = '&#' + id + ';';
-	code4.textContent = '\\' + hex;
-	code5.textContent = '\\u' + padLeft(hex, 4);
+	// Generate rows:
+	console.log('inserting 16^4 rows...');
+	console.time('16^4 rows inserted');
+	for (var i = 0; i < 65536; i++) {
+		hex = i.toString(16);
+		char = String.fromCharCode(i);
+		src += '<tr id="k_' + i + '">' +
+			'<td>' + (entityMap[char] || char) + '</td>' +
+			'<td>' + i + '</td>' +
+			'<td>&amp;#' + i + ';</td>' +
+			'<td>\\' + hex + '</td>' +
+			'<td>\\u' + padLeft(hex, 4) + '</td>' +
+		'</tr>';
+	}
+	trParent.innerHTML = src;
+	console.timeEnd('16^4 rows inserted');
 
 
 	// select text in cells when clicked:
-	[td1, td2, td3, td4, td5].forEach(function(cell) {
-		on(cell, 'click', cellClickHandler);
-	});
-
-	td3.appendChild(code3);
-	td4.appendChild(code4);
-	td5.appendChild(code5);
-
-	tr.appendChild(td1);
-	tr.appendChild(td2);
-	tr.appendChild(td3);
-	tr.appendChild(td4);
-	tr.appendChild(td5);
-
-	return tr;
+	on(trParent, 'click', function cellClickHandler(event) {
+		var range = document.createRange();
+		range.selectNode(event.target.firstChild);
+		window.getSelection().addRange(range);
+	}, true);
 }
 
-var trParent = $id('data');
-
-var numInsertions = 0;
-var i = 0;
-
-console.log('inserting 16^4 rows...');
-console.time('16^4 rows inserted');
-function insertRows() {
-	console.time('16^3 rows inserted');
-	var frag = document.createDocumentFragment();
-	var stopNum = (++numInsertions) * 4096;
-
-	for (; i < stopNum; i++) {
-		frag.appendChild(createRow(i));
-	}
-
-	trParent.appendChild(frag);
-	console.timeEnd('16^3 rows inserted');
-	if (numInsertions < 16) insertRows(); //setTimeout(insertRows, 1000);
-}
-insertRows();
-console.timeEnd('16^4 rows inserted');
+setTimeout(init, 1000)

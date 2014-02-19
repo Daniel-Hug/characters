@@ -12,8 +12,8 @@
 	<header>
 		<div class="col">
 			<select id="event-toggle">
-				<option value="keypress" selected>keypress&nbsp;</option>
-				<option value="keydown">keydown&nbsp;</option>
+				<option selected>keypress</option>
+				<option>keydown</option>
 			</select>
 		</div>
 
@@ -21,7 +21,7 @@
 			<input type="search" class='full' id="search" placeholder="Press any key..." autocomplete="off" autofocus>
 		</div>
 	</header>
-	
+
 	<div id="scroller">
 		<table>
 			<thead>
@@ -33,7 +33,11 @@
 					<th>JS escaped (Hexidecimal)</th>
 				</tr>
 			</thead>
-			<tbody id="data"></tbody>
+			<tbody id="data">
+				<tr>
+					<td colspan="5">Loading...</td>
+				</tr>
+			</tbody>
 		</table>
 	</div>
 
