@@ -3,6 +3,14 @@ function $id(id) {
 	return document.getElementById(id);
 }
 
+function on(target, type, callback) {
+	target.addEventListener(type, callback, false);
+}
+
+function off(target, type, callback) {
+	target.removeEventListener(type, callback, false);
+}
+
 function el(name) {
 	return document.createElement(name);
 }
@@ -13,13 +21,51 @@ function padLeft(str, width) {
 
 
 
+// Listen for load events:
+console.time('window.onload fired');
+console.time('DOMContentLoaded fired');
+
+on(window, 'load', function() {
+	console.timeEnd('window.onload fired');
+});
+on(document, 'DOMContentLoaded', function() {
+	console.timeEnd('DOMContentLoaded fired');
+});
+
+
+
+// Character search:
+var searchField = $id('search');
+
+function keyHandler(event) {
+	var decimal = event.which == null ? event.keyCode : event.which;
+    location.hash = "#k_" + decimal;
+	searchField.focus();
+}
+
+var eventType = 'keypress';
+on(searchField, eventType, keyHandler);
+
+// Event type toggleing
+on($id('event-toggle'), function() {
+	off(searchField, eventType, keyHandler);
+	on(searchField, this.value, keyHandler);
+	eventType = this.value;
+});
+
+
+
+// Row creation:
 function cellClickHandler() {
 	var range = document.createRange();
 	range.selectNode(this.firstChild);
 	window.getSelection().addRange(range);
 }
 
-function createRow(id, char) {
+function createRow(id) {
+	var char = String.fromCharCode(id);
+	var hex = id.toString(16);
+
 	var tr   = el("tr");
 	var td1  = el("td");
 	var td2  = el("td");
@@ -35,14 +81,13 @@ function createRow(id, char) {
 	td1.textContent = char;
 	td2.textContent = id;
 	code3.textContent = '&#' + id + ';';
-	var hex = id.toString(16);
 	code4.textContent = '\\' + hex;
 	code5.textContent = '\\u' + padLeft(hex, 4);
 
 
 	// select text in cells when clicked:
 	[td1, td2, td3, td4, td5].forEach(function(cell) {
-		cell.addEventListener('click', cellClickHandler, false);
+		on(cell, 'click', cellClickHandler);
 	});
 
 	td3.appendChild(code3);
@@ -58,43 +103,25 @@ function createRow(id, char) {
 	return tr;
 }
 
-
 var trParent = $id('data');
 
 var numInsertions = 0;
 var i = 0;
 
-function insert1000Rows() {
+console.log('inserting 16^4 rows...');
+console.time('16^4 rows inserted');
+function insertRows() {
+	console.time('16^3 rows inserted');
 	var frag = document.createDocumentFragment();
-	var stopNum = (++numInsertions) * 1000;
-	
-	for (; i <= stopNum; i++) {
-		frag.appendChild(createRow(i, String.fromCharCode(i)));
+	var stopNum = (++numInsertions) * 4096;
+
+	for (; i < stopNum; i++) {
+		frag.appendChild(createRow(i));
 	}
-	
+
 	trParent.appendChild(frag);
-	if (numInsertions < 10) setTimeout(insert1000Rows, 1000);
+	console.timeEnd('16^3 rows inserted');
+	if (numInsertions < 16) insertRows(); //setTimeout(insertRows, 1000);
 }
-insert1000Rows();
-
-
-
-
-// Character search:
-var searchField = $id('search');
-
-function keyHandler(event) {
-    location.hash = "#k_" + (event.which || window.event.keyCode);
-	searchField.focus();
-}
-
-var eventType = 'keypress';
-searchField.addEventListener(eventType, keyHandler);
-
-
-// Event type toggleing
-$id('event-toggle').onchange = function() {
-	searchField.removeEventListener(eventType, keyHandler);
-	searchField.addEventListener(this.value, keyHandler);
-	eventType = this.value;
-};
+insertRows();
+console.timeEnd('16^4 rows inserted');
