@@ -3,7 +3,7 @@ html, body { height: 100% }
 body, header { background: white }
 
 body {
-	margin: 0 0 24px;
+	margin: 0;
 	font: 18px "Times New Roman", Times, serif;
 }
 
