@@ -1,61 +1,44 @@
-html, body { height: 100% }
-
-body, header { background: white }
-
 body {
 	margin: 0;
 	font: 18px "Times New Roman", Times, serif;
+	text-align: center;
+	background: white;
 }
 
 /* Change selection color */
-::-moz-selection { background: hotpink; color: #fff }
-     ::selection { background: hotpink; color: #fff }
+::-moz-selection { background: hotpink; color: #fff; }
+     ::selection { background: hotpink; color: #fff; }
 
-
-/* table-like layout */
-.col { display: table-cell }
-.full { width: 100% }
-
-
-#event-toggle {
-	display: inline-block;
-	margin-right: 17px;
-	border: 1px solid #ccc;
-	border-radius: 6px;
-	padding: 10px;
-	height: 43px;
-}
-
-
-header, #scroller {
+.site-header, .scroller {
 	position: fixed;
 	width: 100%;
 	min-width: 620px;
 }
 
-header, input[type=search] {
-	-moz-box-sizing: border-box;
-	box-sizing: border-box;
-}
-
-header {
+.site-header {
 	padding: 16px 17px;
 	top: 0;
 	z-index: 10;
 	box-shadow: 0 2px 4px rgba(0,0,0,.15);
 }
 
-#scroller {
+.char-preview {
+    margin: 16px auto 0;
+}
+
+.char-preview th {
+	padding: 0 10px;
+	font-weight: normal;
+	font-size: 14px;
+}
+
+.scroller {
 	overflow-y: scroll;
-	top: 75px;
+	top: 136px; /* .site-header height */
 	bottom: 0;
 }
 
-table, input {
-	width: 86%;
-}
-
-input[type=search] {
+#search-field {
 	padding: 10px;
 	margin: 0 auto;
 	border: 1px solid #ccc;
@@ -71,45 +54,32 @@ input[type=search] {
 	        transition: all 0.2s;
 }
 
-input[type=search]:focus {
+#search-field:focus {
 	border-color: rgba(82,168,236,.8);
-	box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(82,168,236,.6);
+	box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(82,168,236,.6);
 }
 
-table {
-	border-collapse: collapse;
+.table {
 	margin: 24px auto;
 }
 
-tbody tr {
-	height: 30px;
-	-webkit-transition: background-color 0.2s;
-	   -moz-transition: background-color 0.2s;
-	    -ms-transition: background-color 0.2s;
-	     -o-transition: background-color 0.2s;
-	        transition: background-color 0.2s;
+.table div {
+	display: inline-block;
+	width: 40px;
+	height: 40px;
+    line-height: 40px;
+    text-align: center;
+	vertical-align: top;
 }
 
-tbody tr:hover { background-color: #ffd }
-
-tbody tr:target {
-	-webkit-animation: highlight 1s linear;
-	   -moz-animation: highlight 1s linear;
-	    -ms-animation: highlight 1s linear;
-	     -o-animation: highlight 1s linear;
-	        animation: highlight 1s linear;
+.table div:hover {
+	background-color: #ffa;
 }
 
-th, td {
-	border: 1px solid;
-	text-align: center;
-	font-size: 1.333em;
+.table .selected {
+	background: #dfd;
 }
 
-code { font: inherit }
-
-@-webkit-keyframes highlight { 0%{background: #ffe0dd} 100%{background: #fff} }
-   @-moz-keyframes highlight { 0%{background: #ffe0dd} 100%{background: #fff} }
-    @-ms-keyframes highlight { 0%{background: #ffe0dd} 100%{background: #fff} }
-     @-o-keyframes highlight { 0%{background: #ffe0dd} 100%{background: #fff} }
-        @keyframes highlight { 0%{background: #ffe0dd} 100%{background: #fff} }
+code {
+	font: inherit;
+}

@@ -1,0 +1,20 @@
+{
+  "name": "characters",
+  "homepage": "https://github.com/Daniel-Hug/characters",
+  "authors": [
+    "Daniel Hug <daniel@hugwebdesign.com>"
+  ],
+  "description": "web app with table of all UTF-8 characters",
+  "main": "index.html",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "css-tooltips": "0.x"
+  }
+}

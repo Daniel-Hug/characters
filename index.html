@@ -4,41 +4,32 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title>UTF-8 character escape table</title>
-	<meta name="description" content="A giant dynamically generated table of UTF-8 characters with their respective decimal & hexidecimal escapings">
+	<meta name="description" content="A giant dynamically generated table of UTF-8 characters with their respective decimal &amp; hexidecimal escapings">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="css/app.css">
+	<link rel="stylesheet" href="bower_components/css-tooltips/tooltips.css">
 </head>
 <body>
-	<header>
-		<div class="col">
-			<select id="event-toggle">
-				<option selected>keypress</option>
-				<option>keydown</option>
-			</select>
-		</div>
-
-		<div class="col full">
-			<input type="search" class='full' id="search" placeholder="Press any key..." autocomplete="off" autofocus>
-		</div>
-	</header>
-
-	<div id="scroller">
-		<table>
+	<header class="site-header">
+		<label for="search-field">Press any key, or paste a character in here:</label>
+		<input type="search" id="search-field" autocomplete="off">
+		<table class="char-preview">
 			<thead>
 				<tr>
-					<th>Char</th>
 					<th>JS Key Code (decimal)</th>
 					<th>HTML Entity</th>
 					<th>CSS escaped (Hexidecimal)</th>
 					<th>JS escaped (Hexidecimal)</th>
 				</tr>
 			</thead>
-			<tbody id="data">
-				<tr>
-					<td colspan="5">Loading...</td>
-				</tr>
+			<tbody>
+				<tr class="char-data"></tr>
 			</tbody>
 		</table>
+	</header>
+
+	<div class="scroller">
+		<div class="table">Loading...</div>
 	</div>
 
 	<script src="js/app.js"></script>
