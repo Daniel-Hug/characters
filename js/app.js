@@ -55,7 +55,7 @@ var getEscapedChar = (function() {
 		'&': '&amp;',
 		'<': '&lt;',
 		'>': '&gt;'
-	};	
+	};
 
 	return function(charCode) {
 		var char = String.fromCharCode(charCode);
@@ -91,7 +91,7 @@ var previewChar = (function() {
 		'<td>\\' + hex + '</td>' +
 		'<td>\\u' + padLeft(hex, 4) + '</td>';
 
-		charPreview.textContent = getEscapedChar(decimalInt);
+		charPreview.textContent = String.fromCharCode(decimalInt);
 
 		cur = decimalInt;
 	};

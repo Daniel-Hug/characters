@@ -24,12 +24,12 @@ body {
 .site-header > .col {
 	display: inline-block;
 	vertical-align: top;
-	height: 100%;
 }
 
 .site-header > .col:last-child {
 	padding: 16px 17px;
 	border-right: 1px solid #666;
+	height: 104px;
 }
 
 .char-preview {
@@ -39,6 +39,7 @@ body {
 	border-right: 1px solid #666;
 	border-left: 1px solid #666;
 	font-size: 32px;
+	height: 136px;
 }
 
 .char-table {
