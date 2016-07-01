@@ -8,25 +8,27 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="icon" href="favicon.ico">
 	<link rel="stylesheet" href="css/app.css">
-	<link rel="stylesheet" href="bower_components/css-tooltips/tooltips.css">
+	<link rel="stylesheet" href="css/tooltips.css">
 </head>
 <body>
 	<header class="site-header">
-		<label for="search-field">Press any key, or paste a character in here:</label>
-		<input type="search" id="search-field" autocomplete="off">
-		<table class="char-preview">
-			<thead>
-				<tr>
-					<th>JS Key Code (decimal)</th>
-					<th>HTML Entity</th>
-					<th>CSS escaped (Hexidecimal)</th>
-					<th>JS escaped (Hexidecimal)</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr class="char-data"></tr>
-			</tbody>
-		</table>
+		<div class="col char-preview"></div><div class="col">
+			<label for="search-field">Press any key, or paste a character in here:</label>
+			<input type="search" id="search-field" autocomplete="off">
+			<table class="char-table">
+				<thead>
+					<tr>
+						<th>JS Key Code (decimal)</th>
+						<th>HTML Entity</th>
+						<th>CSS escaped (Hexidecimal)</th>
+						<th>JS escaped (Hexidecimal)</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr class="char-data"></tr>
+				</tbody>
+			</table>
+		</div>
 	</header>
 
 	<div class="scroller">

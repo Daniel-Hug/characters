@@ -1,4 +1,0 @@
-tooltips
-========
-
-Pure CSS tooltips

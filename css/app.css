@@ -12,24 +12,51 @@ body {
 .site-header, .scroller {
 	position: fixed;
 	width: 100%;
-	min-width: 620px;
+	min-width: 900px;
 }
 
 .site-header {
-	padding: 16px 17px;
 	top: 0;
 	z-index: 10;
 	box-shadow: 0 2px 4px rgba(0,0,0,.15);
 }
 
+.site-header > .col {
+	display: inline-block;
+	vertical-align: top;
+	height: 100%;
+}
+
+.site-header > .col:last-child {
+	padding: 16px 17px;
+	border-right: 1px solid #666;
+}
+
 .char-preview {
+	width: 248px;
+	height: 136px;
+	line-height: 136px;
+	border-right: 1px solid #666;
+	border-left: 1px solid #666;
+	font-size: 32px;
+}
+
+.char-table {
     margin: 16px auto 0;
 }
 
-.char-preview th {
+.char-table th {
 	padding: 0 10px;
 	font-weight: normal;
 	font-size: 14px;
+}
+
+.char-table th:first-child {
+	padding-left: 0;
+}
+
+.char-table th:last-child {
+	padding-right: 0;
 }
 
 .scroller {

@@ -13,8 +13,5 @@
     "bower_components",
     "test",
     "tests"
-  ],
-  "dependencies": {
-    "css-tooltips": "0.x"
-  }
+  ]
 }

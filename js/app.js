@@ -1,24 +1,14 @@
-// get element by CSS selector:
+// get element by CSS selector
 function qs(selector, scope) {
 	return (scope || document).querySelector(selector);
 }
 
-// add and remove event listeners:
+// add event listeners
 function on(target, type, callback, useCapture) {
 	target.addEventListener(type, callback, !!useCapture);
 }
-function off(target, type, callback, useCapture) {
-	target.removeEventListener(type, callback, !!useCapture);
-}
-function once(target, type, callback, useCapture) {
-	function oneTimeHandler() {
-		callback.apply(this, arguments);
-		off(target, type, oneTimeHandler, useCapture);
-	}
-	on(target, type, oneTimeHandler, useCapture);
-}
 
-// pad string with leading zeros:
+// pad string with leading zeros
 function padLeft(str, width) {
 	return str.length >= width ? str : new Array(width - str.length + 1).join('0') + str;
 }
@@ -30,7 +20,7 @@ function App() {
 }
 
 
-// select text in cells when clicked
+// select text in node
 function selectNode(node) {
 	var range = document.createRange();
 	range.selectNode(node);
@@ -39,7 +29,7 @@ function selectNode(node) {
 	selection.addRange(range);
 }
 
-// copy text in cells when clicked
+// copy text in node and display tooltip
 function copyNode(node) {
 	// select contents
 	selectNode(node.firstChild || node);
@@ -51,31 +41,40 @@ function copyNode(node) {
 	var selection = window.getSelection();
 	selection.removeAllRanges();
 
-	// calculate optimal tooltip position
-	var coords = node.getBoundingClientRect();
-	var pageWidth = document.documentElement.clientWidth;
-	var attr = coords.top < 200 ?
-		(coords.left < 80 ? 'tipBr' :
-			(pageWidth - coords.right < 80 ? 'tipBl' :
-			'tipBm')) :
-		(coords.left < 80 ? 'tipTr' :
-			(pageWidth - coords.right < 80 ? 'tipTl' :
-			'tipTm'));
-
 	// show tooltip until mouseout
-	node.dataset[attr] = 'Copied to clipboard';
-	once(node, 'mouseout', function() {
-		delete node.dataset[attr];
-	});
+	node.dataset.tip = 'Copied to clipboard';
+	node.classList.add('tip-bm');
+	setTimeout(function() {
+		delete node.dataset.tip;
+		node.classList.remove('tip-bm');
+	}, 3050);
 }
 
+var getEscapedChar = (function() {
+	var entityMap = {
+		'&': '&amp;',
+		'<': '&lt;',
+		'>': '&gt;'
+	};	
+
+	return function(charCode) {
+		var char = String.fromCharCode(charCode);
+		return entityMap[char] || char;
+	};
+})();
 
 var previewChar = (function() {
 	var dataParent = qs('.char-data');
+	var charPreview = qs('.char-preview');
 	var cur = null;
 
-	// select text in cell when clicked
+	// copy text in cell when clicked
 	on(dataParent, 'click', function(event) {
+		copyNode(event.target);
+	}, true);
+
+	// copy char in preview when clicked
+	on(charPreview, 'click', function(event) {
 		copyNode(event.target);
 	}, true);
 
@@ -84,7 +83,6 @@ var previewChar = (function() {
 
 		// get view model
 		hex = decimalInt.toString(16);
-		char = String.fromCharCode(decimalInt);
 
 		// render cells
 		dataParent.innerHTML =
@@ -93,6 +91,8 @@ var previewChar = (function() {
 		'<td>\\' + hex + '</td>' +
 		'<td>\\u' + padLeft(hex, 4) + '</td>';
 
+		charPreview.textContent = getEscapedChar(decimalInt);
+
 		cur = decimalInt;
 	};
 })();
@@ -100,22 +100,16 @@ var previewChar = (function() {
 
 var cellParent = qs('.table');
 function generateCells() {
-	var src = '',
-	entityMap = {
-		'&': '&amp;',
-		'<': '&lt;',
-		'>': '&gt;'
-	},
-	hex, char;
+	var src = '';
+	var hex;
 
 	// generate cells
 	console.log('inserting 16^4 cells...');
 	console.time('16^4 cells inserted');
 	for (var i = 0; i < 65536; i++) {
 		hex = i.toString(16);
-		char = String.fromCharCode(i);
 		src += '<div id="k_' + i + '">' +
-			(entityMap[char] || char) +
+			getEscapedChar(i) +
 		'</div>';
 	}
 	cellParent.innerHTML = src;
@@ -146,16 +140,21 @@ function previewCell(cell) {
 // init
 
 var app = new App();
-previewChar(0);
+
+// default char
+previewChar(9924);
+
+// generate cells asynchronously to not block rendering of initial character
 setTimeout(generateCells, 0);
 
 // select character in cell when clicked
+var charPreview = qs('.char-preview');
 on(cellParent, 'click', function() {
 	// make sure a cell is clicked
 	if (event.target === cellParent) return;
 
 	app.selectCell(event.target);
-	copyNode(event.target);
+	copyNode(charPreview);
 }, true);
 
 // show preview of character data on hover

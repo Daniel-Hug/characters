@@ -1,0 +1,159 @@
+/*---------------------*\
+|   Pure CSS tooltips   |
+\*---------------------*/
+
+
+
+/* element
+----------------------------*/
+
+[data-tip] {
+	position: relative;
+	overflow: visible;
+}
+
+
+
+/* triangle & rounded rectangle
+----------------------------*/
+
+[data-tip]:before,
+[data-tip]:after {
+	display: inline-block;
+	position: absolute;
+	z-index: 99;
+	animation: 2s fadeOut cubic-bezier(1,0,1,0.5);
+	opacity: 0;
+	font-size: 16px;
+}
+
+
+
+/* triangle
+----------------------------*/
+
+[data-tip]:before {
+	content: "";
+	width: 0;
+	border: solid transparent;
+}
+
+/* top */
+.tip-tl:before,
+.tip-tr:before,
+.tip-tm:before {
+	border-top-color: black;
+	bottom: 100%;
+}
+
+.tip-tl:before {
+	border-width: .625em 0 0 .875em;
+	right: 50%;
+}
+
+.tip-tr:before {
+	border-width: .625em .875em 0 0;
+	left: 50%;
+}
+
+.tip-tm:before {
+	border-width: .625em .4375em 0;
+	left: 50%;
+	margin-left: -.4375em;
+}
+
+/* bottom */
+.tip-bl:before,
+.tip-br:before,
+.tip-bm:before {
+	border-bottom-color: black;
+	top: 100%;
+}
+
+.tip-bl:before {
+	border-width: 0 0 .625em .875em;
+	right: 50%;
+}
+
+.tip-br:before {
+	border-width: 0 .875em .625em 0;
+	left: 50%;
+}
+
+.tip-bm:before {
+	border-width: 0 .4375em .625em;
+	left: 50%;
+	margin-left: -.4375em;
+}
+
+
+
+/* rounded rectangle
+----------------------------*/
+
+[data-tip]:after {
+	content: attr(data-tip);
+	
+	/* type & style */
+	font: normal 16px/1 sans-serif;
+	white-space: nowrap;
+	text-shadow: none;
+	color: white;
+	background: black;
+	border-radius: .25em;
+	
+	/* position & size */
+	padding: .375em .5em;
+}
+
+.tip-tm:after,
+.tip-bm:after {
+	left: 50%;
+	-webkit-transform: translateX(-50%);
+	-moz-transform: translateX(-50%);
+	-ms-transform: translateX(-50%);
+	-o-transform: translateX(-50%);
+	transform: translateX(-50%);
+}
+
+/* top */
+.tip-tl:after,
+.tip-tr:after,
+.tip-tm:after {
+	bottom: 100%;
+	margin-bottom: .6em;
+}
+
+.tip-tl:after {
+	border-bottom-right-radius: 0;
+	right: 50%;
+}
+
+.tip-tr:after {
+	border-bottom-left-radius: 0;
+	left: 50%;
+}
+
+/* bottom */
+.tip-bl:after,
+.tip-br:after,
+.tip-bm:after {
+	top: 100%;
+	margin-top: .6em;
+}
+
+.tip-bl:after {
+	border-top-right-radius: 0;
+	right: 50%;
+}
+
+.tip-br:after {
+	border-top-left-radius: 0;
+	left: 50%;
+}
+
+@-webkit-keyframes fadeOut { 0%{opacity: 1;} 100%{opacity: 0;} }
+   @-moz-keyframes fadeOut { 0%{opacity: 1;} 100%{opacity: 0;} }
+    @-ms-keyframes fadeOut { 0%{opacity: 1;} 100%{opacity: 0;} }
+     @-o-keyframes fadeOut { 0%{opacity: 1;} 100%{opacity: 0;} }
+        @keyframes fadeOut { 0%{opacity: 1;} 100%{opacity: 0;} }
