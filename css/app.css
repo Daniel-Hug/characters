@@ -103,7 +103,7 @@ body {
 	background-color: #ffa;
 }
 
-.table .selected {
+.table div.selected {
 	background: #dfd;
 }
 

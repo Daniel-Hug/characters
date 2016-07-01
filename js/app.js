@@ -147,13 +147,25 @@ previewChar(9924);
 // generate cells asynchronously to not block rendering of initial character
 setTimeout(generateCells, 0);
 
-// select character in cell when clicked
+// copy character in cell when clicked
 var charPreview = qs('.char-preview');
 on(cellParent, 'click', function() {
 	// make sure a cell is clicked
 	if (event.target === cellParent) return;
 
+	// update hash in URL
+	var hash = '#' + event.target.id;
+	if(history.pushState) {
+		history.pushState(null, null, hash);
+	}
+	else {
+		location.hash = hash;
+	}
+
+	// highlight cell
 	app.selectCell(event.target);
+
+	// copy char
 	copyNode(charPreview);
 }, true);
 
