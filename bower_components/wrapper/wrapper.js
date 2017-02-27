@@ -28,20 +28,38 @@ function Wrapper(options) {
 
 	if (this.fixedWidth) return;
 	var instance = this;
-	window.addEventListener('resize', function() {
+	var timer;
+
+	function handleResize() {
 		var newColCount = instance.getColCount();
 		if (newColCount !== instance.numCols) {
 			instance.numCols = newColCount;
 			instance.render();
 		}
+	}
+
+	window.addEventListener('resize', function () {
+		clearTimeout(timer);
+		timer = setTimeout(handleResize, 50);
 	});
 }
 
 Wrapper.prototype.getColCount = function() {
-	return Math.floor(this.parent.offsetWidth / this.cellWidth);
+	var wrapper = this.parent.parentNode;
+	var computedStyle = getComputedStyle(wrapper);
+	var contentAreaWidth = wrapper.clientWidth - 
+		(parseFloat(computedStyle.paddingLeft) + 
+		parseFloat(computedStyle.paddingRight));
+	return Math.floor(contentAreaWidth / this.cellWidth);
 };
 
 Wrapper.prototype.render = function() {
+	// set parent size
+	var numRows = Math.ceil(this.cells.length / this.numCols);
+	this.parent.style.height = this.cellHeight * numRows + 'px';
+	this.parent.style.width = this.cellWidth * this.numCols + 'px';
+
+	// reposition cells
 	for (var i = 0; i < this.cells.length; i++) {
 		var style = this.cells[i].style;
 		style.left = i % this.numCols * this.cellWidth + 'px';

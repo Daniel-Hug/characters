@@ -9,5 +9,6 @@
   },
   "_source": "https://github.com/Daniel-Hug/wrapper.git",
   "_target": "*",
-  "_originalSource": "Daniel-Hug/wrapper"
+  "_originalSource": "Daniel-Hug/wrapper",
+  "_direct": true
 }
