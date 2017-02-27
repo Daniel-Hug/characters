@@ -8,6 +8,12 @@ function on(target, type, callback, useCapture) {
 	target.addEventListener(type, callback, !!useCapture);
 }
 
+// removes all of an element's childNodes
+function removeChilds(el) {
+	var last;
+	while ((last = el.lastChild)) el.removeChild(last);
+}
+
 // pad string with leading zeros
 function padLeft(str, width) {
 	return str.length >= width ? str : new Array(width - str.length + 1).join('0') + str;
@@ -50,19 +56,6 @@ function copyNode(node) {
 	}, 3050);
 }
 
-var getEscapedChar = (function() {
-	var entityMap = {
-		'&': '&amp;',
-		'<': '&lt;',
-		'>': '&gt;'
-	};
-
-	return function(charCode) {
-		var char = String.fromCharCode(charCode);
-		return entityMap[char] || char;
-	};
-})();
-
 var previewChar = (function() {
 	var dataParent = qs('.char-data');
 	var charPreview = qs('.char-preview');
@@ -100,19 +93,30 @@ var previewChar = (function() {
 
 var cellParent = qs('.table');
 function generateCells() {
-	var src = '';
-	var hex;
-
-	// generate cells
 	console.log('inserting 16^4 cells...');
 	console.time('16^4 cells inserted');
+
+	var cells = [];
+	var docFrag = document.createDocumentFragment();
 	for (var i = 0; i < 65536; i++) {
-		hex = i.toString(16);
-		src += '<div id="k_' + i + '">' +
-			getEscapedChar(i) +
-		'</div>';
+		var cell = document.createElement('div');
+		cell.id = 'k_' + i;
+		cell.textContent = String.fromCharCode(i);
+		cells.push(docFrag.appendChild(cell));
 	}
-	cellParent.innerHTML = src;
+
+	new Wrapper({
+		parent: cellParent,
+		cells: cells,
+		cellWidth: 40,
+		cellHeight: 40
+	});
+
+	removeChilds(cellParent);
+	cellParent.appendChild(docFrag);
+
+	// wait until layout is known for children before stopping the stopwatch
+	cellParent.lastChild.getBoundingClientRect();
 	console.timeEnd('16^4 cells inserted');
 }
 

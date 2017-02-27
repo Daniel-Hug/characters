@@ -89,10 +89,11 @@ body {
 
 .table {
 	margin: 24px auto;
+	position: relative;
 }
 
 .table div {
-	display: inline-block;
+	position: absolute;
 	width: 40px;
 	height: 40px;
     line-height: 40px;

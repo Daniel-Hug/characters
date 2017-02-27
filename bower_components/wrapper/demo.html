@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Make positioned elements wrap with JS</title>
+	<style>
+		.wrapper {
+			position: relative;
+		}
+
+		.wrapper * {
+			width: 300px;
+			height: 32px;
+			position: absolute;
+		}
+	</style>
+</head>
+<body>
+	<h1>Global variable names <a class="github-button" href="https://github.com/Daniel-Hug/wrapper" data-icon="octicon-star" data-style="mega" data-count-href="/Daniel-Hug/wrapper/stargazers" data-count-api="/repos/Daniel-Hug/wrapper#stargazers_count" data-count-aria-label="# stargazers on GitHub" aria-label="Star Daniel-Hug/wrapper on GitHub">Star</a></h1>
+	<div class="wrapper"></div>
+
+	<script src="wrapper.js"></script>
+	<script>
+	var parent = document.querySelector('.wrapper');
+
+	// create an element for each global variable name
+	var cells = Object.keys(window).map(function(key) {
+		var div = document.createElement('div');
+		div.textContent = key;
+		return div;
+	});
+
+	// setup layout
+	var wrapper = new Wrapper({
+		parent: parent,
+		cells: cells,
+		cellWidth: 300,
+		cellHeight: 32
+	});
+
+	// append cells to parent
+	appendMultiple(parent, cells)
+
+	function appendMultiple(parent, elements) {
+		var docFrag = document.createDocumentFragment();
+		for (var i = 0; i < elements.length; i++) {
+			docFrag.appendChild(elements[i]);
+		}
+		parent.appendChild(docFrag);
+	}
+	</script>
+	<script async defer src="https://buttons.github.io/buttons.js"></script>
+</body>
+</html>
