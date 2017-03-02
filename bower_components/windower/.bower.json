@@ -1,0 +1,14 @@
+{
+  "name": "windower",
+  "homepage": "https://github.com/Daniel-Hug/windower",
+  "_release": "a62ea143b3",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "a62ea143b397e8d0be19ff8448bbd6f96a08cd89"
+  },
+  "_source": "https://github.com/Daniel-Hug/windower.git",
+  "_target": "*",
+  "_originalSource": "windower",
+  "_direct": true
+}

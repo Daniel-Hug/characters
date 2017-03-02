@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Windowing: only show elements visible at current scroll position</title>
+	<style>
+		.windower {
+			position: relative;
+		}
+
+		.windower * {
+			width: 300px;
+			height: 32px;
+			position: absolute;
+		}
+	</style>
+</head>
+<body>
+	<h1>Properties of Global variables <a class="github-button" href="https://github.com/Daniel-Hug/windower" data-icon="octicon-star" data-style="mega" data-count-href="/Daniel-Hug/windower/stargazers" data-count-api="/repos/Daniel-Hug/windower#stargazers_count" data-count-aria-label="# stargazers on GitHub" aria-label="Star Daniel-Hug/windower on GitHub">Star</a></h1>
+	<div class="windower"></div>
+
+	<script src="windower.js"></script>
+	<script>
+	// create an element for every property of each global variable
+	var keys = [].concat.apply([], Object.keys(window).map(key => window[key] ? Object.keys(window[key]) : []));
+	var cells = keys.map(function(key) {
+		var div = document.createElement('div');
+		div.textContent = key;
+		return div;
+	});
+
+	// setup layout
+	var windower = new Windower({
+		parent: document.querySelector('.windower'),
+		cells: cells,
+		cellWidth: 300,
+		cellHeight: 32
+	});
+
+	// append cells to parent
+	appendMultiple(windower.parent, cells)
+
+	function appendMultiple(parent, elements) {
+		var docFrag = document.createDocumentFragment();
+		for (var i = 0; i < elements.length; i++) {
+			docFrag.appendChild(elements[i]);
+		}
+		parent.appendChild(docFrag);
+	}
+	</script>
+	<script async defer src="https://buttons.github.io/buttons.js"></script>
+</body>
+</html>

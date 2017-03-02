@@ -93,8 +93,8 @@ var previewChar = (function() {
 
 var cellParent = qs('.table');
 function generateCells() {
-	console.log('inserting 16^4 cells...');
-	console.time('16^4 cells inserted');
+	console.log('generating 16^4 cells...');
+	console.time('16^4 cells generated');
 
 	var cells = [];
 	var docFrag = document.createDocumentFragment();
@@ -105,13 +105,16 @@ function generateCells() {
 		cells.push(docFrag.appendChild(cell));
 	}
 
-	new Wrapper({
+	new Windower({
 		parent: cellParent,
 		cells: cells,
 		cellWidth: 40,
 		cellHeight: 40
 	});
+	console.timeEnd('16^4 cells generated');
 
+	console.log('inserting 16^4 cells...');
+	console.time('16^4 cells inserted');
 	removeChilds(cellParent);
 	cellParent.appendChild(docFrag);
 

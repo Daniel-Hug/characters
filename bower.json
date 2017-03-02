@@ -15,6 +15,6 @@
     "tests"
   ],
   "dependencies": {
-    "wrapper": "Daniel-Hug/wrapper"
+    "windower": "*"
   }
 }
