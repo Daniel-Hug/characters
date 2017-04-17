@@ -105,7 +105,7 @@ function generateCells() {
 		cells.push(docFrag.appendChild(cell));
 	}
 
-	new Windower({
+	var windower = new Windower({
 		parent: cellParent,
 		cells: cells,
 		cellWidth: 40,
@@ -121,6 +121,8 @@ function generateCells() {
 	// wait until layout is known for children before stopping the stopwatch
 	cellParent.lastChild.getBoundingClientRect();
 	console.timeEnd('16^4 cells inserted');
+
+	return windower;
 }
 
 App.prototype.selectCell = function(cell) {
@@ -145,63 +147,69 @@ function previewCell(cell) {
 
 
 // init
-
-var app = new App();
-
-// default char
-previewChar(9924);
-
-// generate cells asynchronously to not block rendering of initial character
-setTimeout(generateCells, 0);
-
-// copy character in cell when clicked
-var charPreview = qs('.char-preview');
-on(cellParent, 'click', function() {
-	// make sure a cell is clicked
-	if (event.target === cellParent) return;
-
-	// update hash in URL
-	var hash = '#' + event.target.id;
-	if(history.pushState) {
-		history.pushState(null, null, hash);
-	}
-	else {
-		location.hash = hash;
-	}
-
-	// highlight cell
-	app.selectCell(event.target);
-
-	// copy char
-	copyNode(charPreview);
-}, true);
-
-// show preview of character data on hover
-on(cellParent, 'mouseover', function cellHoverHandler(event) {
-	if ((event.target === cellParent) || app.curSelected) return;
-	previewCell(event.target);
-}, true);
-
-
-// character search:
 (function() {
-	var searchField = qs('#search-field');
+	var app = new App();
 
-	// press any key
-	on(window, 'keydown', function keyHandler(event) {
-		if (event.target === searchField) return;
-		var decimal = event.which == null ? event.keyCode : event.which;
-		location.hash = "#k_" + decimal;
-		app.selectCell(qs('#k_' + decimal));
-	});
+	// default char
+	previewChar(9924);
 
-	// search field
-	on(searchField, 'input', function() {
-		var val = this.value;
-		if (val.length === 0) return;
-		var lastCharCode = val.charCodeAt(val.length - 1);
-		location.hash = "#k_" + lastCharCode;
-		app.selectCell(qs('#k_' + lastCharCode));
-		searchField.focus();
-	});
+	// generate cells asynchronously to not block rendering of initial character
+	var windower;
+	setTimeout(function() {
+		windower = generateCells()
+	}, 0);
+
+	// copy character in cell when clicked
+	var charPreview = qs('.char-preview');
+	on(cellParent, 'click', function() {
+		// make sure a cell is clicked
+		if (event.target === cellParent) return;
+
+		// update hash in URL
+		var hash = '#' + event.target.id;
+		if(history.pushState) {
+			history.pushState(null, null, hash);
+		}
+		else {
+			location.hash = hash;
+		}
+
+		// highlight cell
+		app.selectCell(event.target);
+
+		// copy char
+		copyNode(charPreview);
+	}, true);
+
+	// show preview of character data on hover
+	on(cellParent, 'mouseover', function cellHoverHandler(event) {
+		if ((event.target === cellParent) || app.curSelected) return;
+		previewCell(event.target);
+	}, true);
+
+
+	// character search:
+	(function() {
+		var searchField = qs('#search-field');
+
+		// press any key
+		on(window, 'keydown', function keyHandler(event) {
+			if (event.target === searchField) return;
+			var decimal = event.which == null ? event.keyCode : event.which;
+			location.hash = "#k_" + decimal;
+			app.selectCell(qs('#k_' + decimal));
+		});
+
+		// search field
+		on(searchField, 'input', function() {
+			var val = this.value;
+			if (val.length === 0) return;
+			var lastCharCode = val.charCodeAt(val.length - 1);
+			var cell = windower.cells[lastCharCode];
+			cell.hidden = false;
+			app.selectCell(cell);
+			location.hash = "#k_" + lastCharCode;
+			searchField.focus();
+		});
+	})();
 })();

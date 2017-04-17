@@ -154,8 +154,10 @@ var Windower = (function() {
 		var numCellsToShow = this.numRowsRendered * this.numCols;
 		var newLastCellIndex = Math.min(newFirstCellIndex + numCellsToShow, this.cells.length) - 1;
 
-		// hide shown cells before first one that should be shown
-		for (var i = this.firstCellIndex || 0; i < newFirstCellIndex; i++) {
+		// In case scroll was downward:
+		// hide shown cells before the new first cell to be shown
+		var lastToHide = Math.min(newFirstCellIndex - 1, this.lastCellIndex || Infinity);
+		for (var i = this.firstCellIndex || 0; i <= lastToHide; i++) {
 			this.cells[i].hidden = true;
 		}
 
@@ -164,9 +166,11 @@ var Windower = (function() {
 			this.cells[i].hidden = false;
 		}
 
-		// hide shown cells after last one that should be shown
+		// In case scroll was upward:
+		// Hide shown cells after the last that should now be shown
+		var firstToHide = Math.max(newLastCellIndex + 1, this.firstCellIndex || -Infinity);
 		var upperBound = this.lastCellIndex + 1 || this.cells.length;
-		for (var i = newLastCellIndex + 1; i < upperBound; i++) {
+		for (var i = firstToHide; i < upperBound; i++) {
 			this.cells[i].hidden = true;
 		}
 
